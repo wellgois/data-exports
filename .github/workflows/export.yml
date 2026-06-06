@@ -1,18 +1,17 @@
 name: Daily Activities Export
 
-# Exporta as atividades do dia anterior da API JogandoLogica como CSV
-# e faz commit do arquivo neste repositório.
+# Exporta as atividades do dia anterior da API JogandoLogica (JSON paginado)
+# converte para CSV e faz commit neste repositório.
 #
 # Secrets necessários (Settings → Secrets and variables → Actions):
 #   API_CLIENT_ID      = client_id da plataforma (ex: plat_xxxx)
 #   API_CLIENT_SECRET  = client_secret da plataforma
-# Variável (pode ser secret ou repository variable):
 #   API_BASE_URL       = https://jogandologica.site/v1   (default abaixo se ausente)
 
 on:
   schedule:
     - cron: "0 6 * * *"        # 06:00 UTC ≈ 03:00 BRT, diário
-  workflow_dispatch:           # execução manual / backfill
+  workflow_dispatch:
     inputs:
       from_date:
         description: "Data inicial (YYYY-MM-DD). Vazio = ontem."
@@ -24,7 +23,7 @@ on:
         default: ""
 
 permissions:
-  contents: write              # necessário para o push do CSV
+  contents: write
 
 concurrency:
   group: activities-export
@@ -43,8 +42,8 @@ jobs:
           set -euo pipefail
           FROM="${{ github.event.inputs.from_date }}"
           TO="${{ github.event.inputs.to_date }}"
-          if [ -z "${FROM}" ]; then FROM="$(date -u -d 'yesterday' +%Y-%m-%d)"; fi
-          if [ -z "${TO}" ];   then TO="$(date -u -d 'yesterday' +%Y-%m-%d)"; fi
+          [ -z "${FROM}" ] && FROM="$(date -u -d 'yesterday' +%Y-%m-%d)" || true
+          [ -z "${TO}" ]   && TO="$(date -u -d 'yesterday' +%Y-%m-%d)"   || true
           echo "from=${FROM}" >> "$GITHUB_OUTPUT"
           echo "to=${TO}"     >> "$GITHUB_OUTPUT"
           echo "Intervalo: ${FROM} → ${TO}"
@@ -59,32 +58,24 @@ jobs:
           set -euo pipefail
           BASE="${API_BASE_URL:-https://jogandologica.site/v1}"
           echo "base=${BASE}" >> "$GITHUB_OUTPUT"
-
           if [ -z "${API_CLIENT_ID:-}" ] || [ -z "${API_CLIENT_SECRET:-}" ]; then
-            echo "::error::Secrets API_CLIENT_ID / API_CLIENT_SECRET não configurados."
-            exit 1
+            echo "::error::Secrets API_CLIENT_ID / API_CLIENT_SECRET não configurados."; exit 1
           fi
-
-          # POST /v1/auth/token com credenciais na query string (validado na Fase 2)
           HTTP=$(curl -s -G -X POST "${BASE}/auth/token" \
             -w "%{http_code}" -o token_resp.json \
             --data-urlencode "grant_type=client_credentials" \
             --data-urlencode "client_id=${API_CLIENT_ID}" \
             --data-urlencode "client_secret=${API_CLIENT_SECRET}")
-
           if [ "${HTTP}" != "200" ]; then
-            echo "::error::Falha ao obter token (HTTP ${HTTP})."
-            cat token_resp.json || true
-            exit 1
+            echo "::error::Falha ao obter token (HTTP ${HTTP})."; cat token_resp.json || true; exit 1
           fi
-
           TOKEN=$(jq -er '.access_token' token_resp.json)
           rm -f token_resp.json
           echo "::add-mask::${TOKEN}"
           echo "value=${TOKEN}" >> "$GITHUB_OUTPUT"
-          echo "Token obtido com sucesso."
+          echo "Token obtido."
 
-      - name: Baixar export de atividades
+      - name: Baixar export paginado (JSON) e converter para CSV
         id: fetch
         env:
           TOKEN: ${{ steps.token.outputs.value }}
@@ -93,48 +84,62 @@ jobs:
           TO:    ${{ steps.dates.outputs.to }}
         run: |
           set -euo pipefail
+          : > all.ndjson
+          CURSOR=""
+          PREV_CURSOR="__none__"
+          PAGE=0
+          while : ; do
+            PAGE=$((PAGE+1))
+            ARGS=(--data-urlencode "from_date=${FROM}" \
+                  --data-urlencode "to_date=${TO}" \
+                  --data-urlencode "limit=5000")
+            [ -n "${CURSOR}" ] && ARGS+=(--data-urlencode "cursor=${CURSOR}") || true
+            HTTP=$(curl -s -G "${BASE}/activities/export" \
+              -H "Authorization: Bearer ${TOKEN}" -H "Accept: application/json" \
+              -w "%{http_code}" -o page.json "${ARGS[@]}")
+            if [ "${HTTP}" != "200" ]; then
+              echo "::error::Export falhou na página ${PAGE} (HTTP ${HTTP})."
+              head -c 500 page.json || true; exit 1
+            fi
+            jq -c '.data[]?' page.json >> all.ndjson
+            HASMORE=$(jq -r '.has_more // false' page.json)
+            CURSOR=$(jq -r '.next_cursor // empty' page.json)
+            echo "  página ${PAGE}: +$(jq '.count // 0' page.json) registros (has_more=${HASMORE})"
+            # condições de parada / proteção contra loop infinito
+            [ "${HASMORE}" = "true" ] || break
+            [ -n "${CURSOR}" ] || break
+            [ "${CURSOR}" != "${PREV_CURSOR}" ] || { echo "::warning::cursor repetido; parando."; break; }
+            [ "${PAGE}" -lt 1000 ] || { echo "::warning::limite de 1000 páginas atingido."; break; }
+            PREV_CURSOR="${CURSOR}"
+          done
+          rm -f page.json
 
-          # >>> AJUSTE AQUI se os nomes dos parâmetros do endpoint forem outros <<<
-          # Confirme com:
-          #   curl -s https://jogandologica.site/v1/openapi.json \
-          #     | jq '.paths["/v1/activities/export"].get.parameters'
+          RECORDS=$(wc -l < all.ndjson | tr -d ' ')
+          echo "Total de registros: ${RECORDS}"
+          echo "records=${RECORDS}" >> "$GITHUB_OUTPUT"
+          if [ "${RECORDS}" -eq 0 ]; then
+            echo "Sem atividades no período — nada a gravar."
+            exit 0
+          fi
+
           OUTDIR="exports/$(date -u -d "${FROM}" +%Y)"
           mkdir -p "${OUTDIR}"
           OUTFILE="${OUTDIR}/activities_${FROM}.csv"
-          if [ "${FROM}" != "${TO}" ]; then
-            OUTFILE="${OUTDIR}/activities_${FROM}_to_${TO}.csv"
-          fi
+          [ "${FROM}" != "${TO}" ] && OUTFILE="${OUTDIR}/activities_${FROM}_to_${TO}.csv" || true
 
-          HTTP=$(curl -s -G "${BASE}/activities/export" \
-            -H "Authorization: Bearer ${TOKEN}" \
-            -H "Accept: text/csv" \
-            -w "%{http_code}" -o "${OUTFILE}" \
-            --data-urlencode "from_date=${FROM}" \
-            --data-urlencode "to_date=${TO}")
-
-          if [ "${HTTP}" != "200" ]; then
-            echo "::error::Export falhou (HTTP ${HTTP}). Resposta:"
-            head -c 500 "${OUTFILE}" || true
-            rm -f "${OUTFILE}"
-            exit 1
-          fi
-
-          # Sanidade: arquivo não-vazio e não é um JSON de erro
-          if [ ! -s "${OUTFILE}" ]; then
-            echo "::error::Export retornou arquivo vazio."
-            rm -f "${OUTFILE}"
-            exit 1
-          fi
-          if head -c 1 "${OUTFILE}" | grep -q '{'; then
-            echo "::warning::Resposta parece JSON, não CSV. Verifique o Accept/params do endpoint."
-            head -c 500 "${OUTFILE}"
-          fi
-
-          LINES=$(wc -l < "${OUTFILE}")
-          echo "Salvo ${OUTFILE} (${LINES} linhas)."
+          # JSON→CSV genérico: colunas = união das chaves; valores não-escalares viram JSON.
+          jq -rs '
+            (map(keys) | add | unique) as $cols
+            | ($cols | @csv),
+              ( .[] | [ $cols[] as $c
+                        | (.[$c] | if type=="object" or type=="array" then tojson else . end) ]
+                    | @csv )
+          ' all.ndjson > "${OUTFILE}"
+          echo "Salvo ${OUTFILE} ($(wc -l < "${OUTFILE}") linhas incl. cabeçalho)."
           echo "file=${OUTFILE}" >> "$GITHUB_OUTPUT"
 
       - name: Commit e push do CSV
+        if: steps.fetch.outputs.records != '0'
         env:
           OUTFILE: ${{ steps.fetch.outputs.file }}
         run: |
@@ -143,8 +148,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add "${OUTFILE}"
           if git diff --cached --quiet; then
-            echo "Nenhuma mudança — arquivo idêntico ao já versionado."
-            exit 0
+            echo "Nenhuma mudança — arquivo idêntico ao versionado."; exit 0
           fi
           git commit -m "data: export de atividades (${{ steps.dates.outputs.from }} → ${{ steps.dates.outputs.to }})"
           git push
