@@ -85,13 +85,17 @@ jobs:
         run: |
           set -euo pipefail
           : > all.ndjson
+          # A API trata to_date como EXCLUSIVO ([from, to)). Para incluir o dia TO,
+          # passamos to_date = TO + 1 dia. FROM/TO seguem nomeando o CSV pela data real.
+          TO_EXCL=$(date -u -d "${TO} +1 day" +%Y-%m-%d)
+          echo "Consultando API com from_date=${FROM} to_date=${TO_EXCL} (exclusivo)"
           CURSOR=""
           PREV_CURSOR="__none__"
           PAGE=0
           while : ; do
             PAGE=$((PAGE+1))
             ARGS=(--data-urlencode "from_date=${FROM}" \
-                  --data-urlencode "to_date=${TO}" \
+                  --data-urlencode "to_date=${TO_EXCL}" \
                   --data-urlencode "limit=5000")
             [ -n "${CURSOR}" ] && ARGS+=(--data-urlencode "cursor=${CURSOR}") || true
             HTTP=$(curl -s -G "${BASE}/activities/export" \
