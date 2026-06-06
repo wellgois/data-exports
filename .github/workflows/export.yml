@@ -62,6 +62,7 @@ jobs:
             echo "::error::Secrets API_CLIENT_ID / API_CLIENT_SECRET não configurados."; exit 1
           fi
           HTTP=$(curl -s -G -X POST "${BASE}/auth/token" \
+            --connect-timeout 15 --max-time 60 --retry 4 --retry-all-errors --retry-delay 5 \
             -w "%{http_code}" -o token_resp.json \
             --data-urlencode "grant_type=client_credentials" \
             --data-urlencode "client_id=${API_CLIENT_ID}" \
@@ -99,6 +100,7 @@ jobs:
                   --data-urlencode "limit=5000")
             [ -n "${CURSOR}" ] && ARGS+=(--data-urlencode "cursor=${CURSOR}") || true
             HTTP=$(curl -s -G "${BASE}/activities/export" \
+              --connect-timeout 15 --max-time 120 --retry 4 --retry-all-errors --retry-delay 5 \
               -H "Authorization: Bearer ${TOKEN}" -H "Accept: application/json" \
               -w "%{http_code}" -o page.json "${ARGS[@]}")
             if [ "${HTTP}" != "200" ]; then
