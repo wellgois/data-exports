@@ -16,10 +16,15 @@ sala de aula com meus próprios alunos do Ensino Fundamental II. Ela
 gera milhares de eventos de atividade — sessões de jogo, missões,
 acertos e erros — que ficam invisíveis num banco transacional.
 
-Este pipeline expõe esses dados via API REST, ingere em janelas
-incrementais e transforma num **lakehouse analítico**, permitindo
-responder perguntas como *"qual habilidade da BNCC a turma 701 menos
-domina?"* ou *"qual o pico de engajamento por dia da semana?"*.
+Este projeto expõe esses dados via API REST e os processa por **dois
+pipelines independentes**, cada um com seu propósito:
+
+- **Pipeline analítico (Azure Databricks + ADF):** lakehouse medallion
+  pra responder perguntas como *"qual habilidade da BNCC a turma 701
+  menos domina?"* ou *"qual o pico de engajamento por dia da semana?"*
+- **Pipeline operacional (GitHub Actions):** export diário em CSV
+  versionado neste mesmo repo — backup auditável, leve, sem depender
+  de infra Azure.
 
 > **Nota de honestidade técnica:** este é um pipeline em produção,
 > não um exemplo de sandbox. Como qualquer pipeline real, tem ciclos
@@ -32,25 +37,64 @@ domina?"* ou *"qual o pico de engajamento por dia da semana?"*.
 ## 🏗️ Arquitetura
 
 ```
-  FastAPI (JogandoLógica API)             ← fonte: REST + OpenAPI/Swagger
-     │   GET /v1/events  (janela incremental)
-     ▼
-  Azure Data Factory                      ← orquestração
-     │   TumblingWindowTrigger (diário)
-     │   pl_ingest_bronze
-     │      └─→ pl_transform_silver_gold (ExecutePipeline)
-     ▼
-  Azure Databricks  +  PySpark            ← processamento distribuído
-     │
-     ├── BRONZE  (raw)      Delta  ── eventos crus, schema validado
-     ├── SILVER  (limpo)    Delta  ── deduplicação, tipagem, conformação
-     └── GOLD    (marts)    Delta  ── agregações analíticas
-     │
-     ▼
-  ADLS Gen2 (abfss://)  +  export versionado no GitHub
+                  FastAPI (JogandoLógica API)
+                  REST + OAuth2 + OpenAPI/Swagger
+                            │
+            ┌───────────────┴───────────────┐
+            ▼                               ▼
+  ════════════════════════      ════════════════════════
+   PIPELINE OPERACIONAL          PIPELINE ANALÍTICO
+   (GitHub Actions)              (Azure Data Factory)
+  ════════════════════════      ════════════════════════
+            │                               │
+   cron diário (03:00 BRT)         TumblingWindowTrigger
+   OAuth2 client_credentials       pl_ingest_bronze
+   paginação por cursor                └─→ pl_transform_silver_gold
+   jq: JSON → CSV genérico                     │
+            │                                  ▼
+            ▼                       Azure Databricks + PySpark
+   CSV versionado (Git)                        │
+   exports/2026/                    ┌──────────┼──────────┐
+   activities_YYYY-MM-DD.csv        ▼          ▼          ▼
+                                  BRONZE     SILVER      GOLD
+                                  (raw)     (limpo)    (marts)
+                                  Delta      Delta      Delta
+                                            │
+                                            ▼
+                                  ADLS Gen2 (abfss://)
 ```
 
-## 🧱 Camadas
+**Por que dois pipelines?** O operacional é **simples, barato e
+auditável** — basta o GitHub Actions, sem cloud. Serve como backup
+versionado de CSVs (úteis pra inspeção rápida e replay). O analítico
+é **escalável e dimensional** — Spark distribuído sobre Delta Lake
+pra responder perguntas analíticas em volumes maiores. Caem em
+contextos de uso diferentes.
+
+## 🔁 Pipeline Operacional — `.github/workflows/export.yml`
+
+Export diário em CSV via **GitHub Actions** com cron `0 6 * * *`
+(03:00 BRT). Características técnicas:
+
+- **OAuth2 client_credentials** contra a API JogandoLógica (token
+  obtido em runtime via `/auth/token`, masked nos logs).
+- **Paginação por cursor** com proteção contra loop infinito (limite
+  de 1000 páginas, detecção de cursor repetido).
+- **Janela temporal** parametrizável via `workflow_dispatch` ou
+  inferida como "ontem", com tratamento explícito do `to_date`
+  exclusivo (incluindo o dia final via +1d).
+- **JSON → CSV genérico via `jq`**: união de chaves como cabeçalho,
+  valores não-escalares serializados como JSON aninhado.
+- **Defensivo**: `set -euo pipefail`, retry com backoff em todos os
+  curls, timeouts conservadores.
+- **Secrets do GitHub** pra credenciais — nada hardcoded.
+
+Os CSVs ficam em `exports/YYYY/activities_YYYY-MM-DD.csv`, commitados
+pelo bot `github-actions[bot]`. Vantagem desse pipeline: **funciona
+sem nenhuma infra Azure** — útil pra auditoria e como fallback se o
+pipeline analítico estiver em manutenção.
+
+## 🧱 Pipeline Analítico — Camadas
 
 ### Bronze — `pipeline_bronze_ingest.py`
 
@@ -110,13 +154,15 @@ activity-run`), não no editor do ADF Studio.
 
 ## 📦 Versionamento
 
-Artefatos do pipeline versionados aqui no GitHub. Deploys via
-**GitHub Actions** (workflow `github_export.yml`).
+Todos os artefatos (notebooks Databricks, workflow GitHub Actions,
+docs) versionados aqui. O pipeline operacional usa **GitHub Actions
+nativo** pra deploy e execução agendada — sem servidor próprio.
 
 ## 🗺️ Roadmap
 
-- [x] Pipeline bronze (ingestão incremental da API)
-- [x] Pipeline silver/gold (transformação e agregação)
+- [x] Pipeline operacional (GitHub Actions: API → CSV → Git)
+- [x] Pipeline analítico bronze (ingestão incremental da API)
+- [x] Pipeline analítico silver/gold (transformação e agregação)
 - [x] Orquestração com TumblingWindowTrigger
 - [x] Encadeamento bronze → silver → gold
 - [ ] Aumento de cota Azure (em aprovação) → multi-node cluster
