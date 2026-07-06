@@ -1,0 +1,5 @@
+source,ref_id,escola,turma,participante_hash,participante_tipo,pontos,acertos,total,tempo_seg,status,occurred_at
+jogos,054fdab2-4643-4198-a530-da05b1e02232,,,950be96c06694b3855c9b6af054ae9431eae819d60f8a22b589ef5e34ca2a07a,aluno,0,0,,0,em_andamento,2026-06-29 16:27:41.498066-03
+jogos,93d9dbe1-50c1-4296-964f-fcfeb322e4f9,,,950be96c06694b3855c9b6af054ae9431eae819d60f8a22b589ef5e34ca2a07a,aluno,0,0,,0,em_andamento,2026-06-29 16:28:49.969815-03
+jogos,b4cd6b20-95c5-4f38-8d23-64e252476f98,,,950be96c06694b3855c9b6af054ae9431eae819d60f8a22b589ef5e34ca2a07a,aluno,0,0,,0,em_andamento,2026-06-29 16:29:01.711217-03
+trabalhos,7c4d4f9a-eac2-4051-b291-7aca70351f92,,,652cef9c24e4b98a5154e620ee503ee6595d04f490ea302b5b0320b7450e0652,aluno,15000,,,,avaliado,2026-06-29 18:23:25.946136-03

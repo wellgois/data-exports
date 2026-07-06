@@ -1,0 +1,5 @@
+source,ref_id,escola,turma,participante_hash,participante_tipo,pontos,acertos,total,tempo_seg,status,occurred_at
+dever,163,E.M. George Pfisterer,707,ddf092234a20ea21b0c74b7adb90500444958b204787d56573e02372dcb18b5a,aluno,398,3,5,0,encerrado,2026-04-03 08:45:52.348-03
+dever,164,E.M. George Pfisterer,707,f1d2dd6bf6075df337563451d48d7266f563cc55aac739d380b5e699fb502f66,aluno,312,3,5,0,encerrado,2026-04-03 13:14:15.336-03
+dever,165,E.M. George Pfisterer,707,f8d46f6c5a0d3b28b55e7c2e80ecc327012442ae1d95c3dd101d0c791822ba4c,aluno,309,0,3,0,encerrado,2026-04-03 13:35:12.891-03
+dever,166,E.M. George Pfisterer,707,f8d46f6c5a0d3b28b55e7c2e80ecc327012442ae1d95c3dd101d0c791822ba4c,aluno,106,2,3,0,encerrado,2026-04-03 13:43:13.192-03

@@ -1,0 +1,6 @@
+source,ref_id,escola,turma,participante_hash,participante_tipo,pontos,acertos,total,tempo_seg,status,occurred_at
+jogos,1683f061-3ec2-4f6b-aec2-8a82322d3af7,,,5eb050f8d72bd9905dee38d074ff58a3639c5f2504e704114fadb84c4de62d9d,aluno,0,0,,289,finalizado,2026-06-08 21:17:07.045525-03
+jogos,fa23f5e7-48de-4323-8c0d-97e25b31d4aa,,,5eb050f8d72bd9905dee38d074ff58a3639c5f2504e704114fadb84c4de62d9d,aluno,0,0,,227,finalizado,2026-06-08 21:17:16.447463-03
+jogos,896df837-5519-4ec2-9e06-f52122889731,,,5eb050f8d72bd9905dee38d074ff58a3639c5f2504e704114fadb84c4de62d9d,aluno,0,0,,347,finalizado,2026-06-08 21:21:14.67282-03
+jogos,b7f5338f-fe06-436a-a9db-f935b5035a80,,,5eb050f8d72bd9905dee38d074ff58a3639c5f2504e704114fadb84c4de62d9d,aluno,0,0,,218,finalizado,2026-06-08 21:36:58.404119-03
+jogos,fcdbde2d-a75b-4a55-a7d0-ccb4133ec226,,,5eb050f8d72bd9905dee38d074ff58a3639c5f2504e704114fadb84c4de62d9d,aluno,0,0,,203,finalizado,2026-06-08 21:37:01.572791-03

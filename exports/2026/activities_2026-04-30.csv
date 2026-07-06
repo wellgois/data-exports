@@ -1,0 +1,7 @@
+source,ref_id,escola,turma,participante_hash,participante_tipo,pontos,acertos,total,tempo_seg,status,occurred_at
+dever,1777414210610,E.M. George Pfisterer,706,9d329b273dce31f04a65334ac6a226f9ee380739620820965ced41a9635b5a19,aluno,0,0,5,,cancelada,2026-04-30 17:41:05.978238-03
+jogos,0a47657d-cc6d-40de-903a-d1152899b89f,,,ca66afb3c179802aa030d2cff687de5cf5d01b3f1411dda2510cfcc16413db22,aluno,0,0,,0,em_andamento,2026-04-30 17:41:42.946552-03
+jogos,021d6223-8b5b-4d48-9bc9-fa38ae8d0369,,,ca66afb3c179802aa030d2cff687de5cf5d01b3f1411dda2510cfcc16413db22,aluno,0,0,,0,em_andamento,2026-04-30 17:42:08.925341-03
+jogos,be520cde-da4e-4595-96b4-30ed1bb166f1,,,ca66afb3c179802aa030d2cff687de5cf5d01b3f1411dda2510cfcc16413db22,aluno,0,0,,0,em_andamento,2026-04-30 17:42:58.58519-03
+jogos,a2f70aba-3eea-42c6-85f5-5447b2a6af52,,,ca66afb3c179802aa030d2cff687de5cf5d01b3f1411dda2510cfcc16413db22,aluno,0,0,,0,em_andamento,2026-04-30 17:44:13.075076-03
+jogos,7b6c3147-52cf-4e50-b37a-e7ebb91a2c89,,,ca66afb3c179802aa030d2cff687de5cf5d01b3f1411dda2510cfcc16413db22,aluno,1200,12,,204,finalizado,2026-04-30 17:45:01.65506-03

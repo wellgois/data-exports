@@ -1,0 +1,6 @@
+source,ref_id,escola,turma,participante_hash,participante_tipo,pontos,acertos,total,tempo_seg,status,occurred_at
+logika,1781514625030,Instituto Cultural Olavo Bilac,401,884ff65e069f652b4c6ba6b489d6128bffc095c80f1dfdd4f147dc6979eafe7d,equipe,800,4,5,0,cancelada,2026-06-15 06:02:10.136-03
+logika,1781521592698,Instituto Cultural Olavo Bilac,401,884ff65e069f652b4c6ba6b489d6128bffc095c80f1dfdd4f147dc6979eafe7d,equipe,1000,5,5,0,cancelada,2026-06-15 08:00:45.556-03
+dever,1781521592698,Instituto Cultural Olavo Bilac,401,884ff65e069f652b4c6ba6b489d6128bffc095c80f1dfdd4f147dc6979eafe7d,aluno,1000,5,5,,encerrado,2026-06-15 08:00:45.566138-03
+jogos,f0cc9d07-1c3c-4ed4-a48f-e73f33a3601c,,,1b4862d6b076bea00ee9c679c6a661be8eb1abaaf1eeb90af3c9b3bc443fa7c8,aluno,0,0,,0,em_andamento,2026-06-15 11:05:58.211303-03
+jogos,c60935b4-b841-41d3-818c-ddcaa6ef662a,,,1b4862d6b076bea00ee9c679c6a661be8eb1abaaf1eeb90af3c9b3bc443fa7c8,aluno,0,0,,0,em_andamento,2026-06-15 11:06:29.030189-03

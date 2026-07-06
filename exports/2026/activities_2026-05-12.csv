@@ -1,0 +1,5 @@
+source,ref_id,escola,turma,participante_hash,participante_tipo,pontos,acertos,total,tempo_seg,status,occurred_at
+jogos,80064704-a667-4e56-9388-4e5d86904a3e,,,5409bef6b72a7e9461308ff028faa824e0a9e536ce1e5a07b6a409a2e4c00df3,aluno,7500,1,,93,finalizado,2026-05-12 08:17:51.320431-03
+jogos,a418051c-80c0-4153-bcf5-3f0038dee865,,,5eb050f8d72bd9905dee38d074ff58a3639c5f2504e704114fadb84c4de62d9d,aluno,600,12,,446,finalizado,2026-05-12 13:50:22.956203-03
+jogos,9cf22236-a7ab-4ab5-93c1-b639f117db47,,,5eb050f8d72bd9905dee38d074ff58a3639c5f2504e704114fadb84c4de62d9d,aluno,0,0,,236,finalizado,2026-05-12 13:58:30.27553-03
+dever,1778335545987,E.M. George Pfisterer,703,c31e91eef6a5ff8f42629e8d213573ebf7c2d0789db1a16b5193a8e46bac042d,aluno,50,5,10,497,encerrado,2026-05-12 15:21:05.974192-03

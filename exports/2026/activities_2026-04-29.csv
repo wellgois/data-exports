@@ -1,0 +1,4 @@
+source,ref_id,escola,turma,participante_hash,participante_tipo,pontos,acertos,total,tempo_seg,status,occurred_at
+dever,1777414032462,E.M. George Pfisterer,701,6f49e6f8fd45944b357cfd23f5127b6b4c874857b0134377ccfb222bf6be2423,aluno,0,0,10,,cancelada,2026-04-28 21:54:30.841878-03
+jogos,829c3cca-8935-460e-af5a-910d7a7d7e7e,,,c4d0941a42cfceadae85f4ea5764a13b15eae76b22f503a097b2f637d4a8463b,aluno,30000,1,,0,finalizado,2026-04-29 09:49:17.332785-03
+jogos,6960fa68-fa5b-4485-848c-64dc0e2f1918,,,ca66afb3c179802aa030d2cff687de5cf5d01b3f1411dda2510cfcc16413db22,aluno,5000,0,,0,finalizado,2026-04-29 09:49:17.348361-03

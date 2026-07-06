@@ -1,0 +1,14 @@
+source,ref_id,escola,turma,participante_hash,participante_tipo,pontos,acertos,total,tempo_seg,status,occurred_at
+jogos,5475c35d-2348-4f73-8676-362a347f2844,,,7b6b336408e7a0abc9b660416b327d9c4b1f95308fbd3bbded867111247167fe,aluno,750,15,,577,finalizado,2026-05-15 23:34:31.400534-03
+logika,1778948484000,Instituto Cultural Olavo Bilac,401,884ff65e069f652b4c6ba6b489d6128bffc095c80f1dfdd4f147dc6979eafe7d,equipe,0,0,10,,cancelada,2026-05-16 13:08:56.464-03
+dever,1778948484000,Instituto Cultural Olavo Bilac,401,884ff65e069f652b4c6ba6b489d6128bffc095c80f1dfdd4f147dc6979eafe7d,aluno,0,0,10,,cancelada,2026-05-16 14:10:20.997804-03
+logika,1778952097908,Instituto Cultural Olavo Bilac,401,884ff65e069f652b4c6ba6b489d6128bffc095c80f1dfdd4f147dc6979eafe7d,equipe,80,4,5,,cancelada,2026-05-16 14:17:02.875-03
+dever,1778952097908,Instituto Cultural Olavo Bilac,401,884ff65e069f652b4c6ba6b489d6128bffc095c80f1dfdd4f147dc6979eafe7d,aluno,80,4,5,162,encerrado,2026-05-16 14:17:50.483079-03
+logika,1778960029442,Instituto Cultural Olavo Bilac,401,884ff65e069f652b4c6ba6b489d6128bffc095c80f1dfdd4f147dc6979eafe7d,equipe,80,4,5,,cancelada,2026-05-16 16:21:58.064-03
+dever,1778960029442,Instituto Cultural Olavo Bilac,401,884ff65e069f652b4c6ba6b489d6128bffc095c80f1dfdd4f147dc6979eafe7d,aluno,80,4,5,216,encerrado,2026-05-16 16:22:51.239178-03
+logika,1778962576080,Instituto Cultural Olavo Bilac,401,884ff65e069f652b4c6ba6b489d6128bffc095c80f1dfdd4f147dc6979eafe7d,equipe,100,5,5,,cancelada,2026-05-16 17:02:11.685-03
+dever,1778962576080,Instituto Cultural Olavo Bilac,401,884ff65e069f652b4c6ba6b489d6128bffc095c80f1dfdd4f147dc6979eafe7d,aluno,100,5,5,45,encerrado,2026-05-16 17:02:51.186953-03
+logika,1778963451472,Instituto Cultural Olavo Bilac,401,884ff65e069f652b4c6ba6b489d6128bffc095c80f1dfdd4f147dc6979eafe7d,equipe,15000,5,5,,cancelada,2026-05-16 17:27:46.211-03
+dever,1778963451472,Instituto Cultural Olavo Bilac,401,884ff65e069f652b4c6ba6b489d6128bffc095c80f1dfdd4f147dc6979eafe7d,aluno,15000,5,5,62,encerrado,2026-05-16 17:28:25.667765-03
+jogos,c7a089f9-93ba-4ac2-9437-db63f2a9ff5e,,,5eb050f8d72bd9905dee38d074ff58a3639c5f2504e704114fadb84c4de62d9d,aluno,2000,1,,271,finalizado,2026-05-16 18:23:10.807441-03
+jogos,793e7c65-d473-4f41-81fe-2b520a11697a,,,5eb050f8d72bd9905dee38d074ff58a3639c5f2504e704114fadb84c4de62d9d,aluno,2000,1,,230,finalizado,2026-05-16 18:29:23.747622-03

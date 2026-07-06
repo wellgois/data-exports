@@ -1,0 +1,13 @@
+source,ref_id,escola,turma,participante_hash,participante_tipo,pontos,acertos,total,tempo_seg,status,occurred_at
+dever,167,E.M. George Pfisterer,701,7544390892c44427edaf3e2535fd580c728f84403d6b10db924c9341ba9983cd,aluno,850,8,10,0,encerrado,2026-04-06 10:40:17.319-03
+dever,168,E.M. George Pfisterer,701,c3b017a0aec5062c1258539ba96e163cd765a8f82d550902464be3bfa2dfb431,aluno,860,9,10,0,encerrado,2026-04-06 10:42:28.718-03
+dever,169,E.M. George Pfisterer,701,0a668c4c0f5b9e45809eaf97ac8a7055dd75c7200e04039dffbfeb758c2c2e23,aluno,1015,9,10,0,encerrado,2026-04-06 10:48:17.371-03
+dever,170,E.M. George Pfisterer,701,6f49e6f8fd45944b357cfd23f5127b6b4c874857b0134377ccfb222bf6be2423,aluno,640,2,10,0,encerrado,2026-04-06 10:55:55.329-03
+dever,171,E.M. George Pfisterer,701,450ba029eb4873938d4996a3e8aa529cc37bdcc6b40aefb6e0811e87357cc074,aluno,570,1,10,0,encerrado,2026-04-06 11:27:18.921-03
+dever,172,E.M. George Pfisterer,701,3f061449b2e8da0e55de01e361cf4688400a1e8995516cba72b5058570eb2ca8,aluno,1170,6,10,0,encerrado,2026-04-06 11:33:27.509-03
+dever,173,E.M. George Pfisterer,701,3f061449b2e8da0e55de01e361cf4688400a1e8995516cba72b5058570eb2ca8,aluno,1110,9,10,0,encerrado,2026-04-06 11:37:57.003-03
+dever,174,E.M. George Pfisterer,701,24013fa145c13acfb27ed4b22cf16198a3027bc543f5f1402848e88e71a574d1,aluno,1080,10,10,0,encerrado,2026-04-06 11:41:33.449-03
+dever,175,E.M. George Pfisterer,701,f302b5c2b6dabd1ad3fb02c4c5fdbd48a6ea98d93ecd0286a25af027ea32db13,aluno,895,8,10,0,encerrado,2026-04-06 11:45:53.182-03
+dever,176,E.M. George Pfisterer,701,f302b5c2b6dabd1ad3fb02c4c5fdbd48a6ea98d93ecd0286a25af027ea32db13,aluno,800,3,10,0,encerrado,2026-04-06 11:49:01.822-03
+dever,159,E.M. George Pfisterer,703,9465d761d5b00641e46623f57f98505bc9342159a135986a2f232f3481f850e0,aluno,5560,38,48,0,encerrado,2026-04-06 16:10:34.465-03
+dever,160,E.M. George Pfisterer,702,f0cb3f42f5afdfe4488da4827ea01741804524bf5450f738a78c5ecf56be11c6,aluno,4805,35,48,0,encerrado,2026-04-06 17:59:45.965-03

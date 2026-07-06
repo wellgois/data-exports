@@ -1,0 +1,14 @@
+source,ref_id,escola,turma,participante_hash,participante_tipo,pontos,acertos,total,tempo_seg,status,occurred_at
+dever,198,E.M. George Pfisterer,701,1bd97c9cf52322cdf69ccfeb107eded89672815c9c9b0bbef744368162e29683,aluno,980,9,10,0,encerrado,2026-03-17 21:00:30.162-03
+dever,205,E.M. George Pfisterer,707,dec5e0d6ba8faf9c59544e3367e624cec07af95f322388db12c0b3423dc2c0b6,aluno,45,3,10,965,encerrado,2026-03-17 21:03:11.170824-03
+dever,197,E.M. George Pfisterer,703,e38924847da0efc0381a1095eead063d953af7cc5a1272179bb51d18465efed9,aluno,36,1,10,0,encerrado,2026-03-17 21:10:29.177-03
+dever,202,E.M. George Pfisterer,701,2b9ce6e64bf794bb2713bcf69fa117d990918b6296ba59684abd5942aa2e3e2a,aluno,965,8,10,0,encerrado,2026-03-17 21:22:34.004-03
+dever,188,E.M. George Pfisterer,701,08d76adc3879bd1c86dab790d6a02a0f80be1b228c30463b31955d661fc43b26,aluno,1110,10,10,0,encerrado,2026-03-17 22:11:49.386-03
+dever,207,E.M. George Pfisterer,703,449a08cc9d7e6fea2aad11f7e938385357597ea16f7dc674f5b0d6823b09f5b7,aluno,60,6,10,0,encerrado,2026-03-17 22:43:40.985-03
+dever,208,E.M. George Pfisterer,701,a3d7ffc075daaa745c471770c067f63a1caaa7183fab6284dbae587c8dda0230,aluno,71,10,10,0,encerrado,2026-03-18 05:58:20.183-03
+dever,209,E.M. George Pfisterer,701,08d76adc3879bd1c86dab790d6a02a0f80be1b228c30463b31955d661fc43b26,aluno,1950,16,20,0,encerrado,2026-03-18 13:30:56.363-03
+dever,210,E.M. George Pfisterer,703,9d71b0814dc45874e1d0042725fb7cea0af22872590b44aab9b7bdd71c0d5ac7,aluno,45,1,20,0,encerrado,2026-03-18 13:33:18.771-03
+dever,211,E.M. George Pfisterer,701,11cb36dd8578dabde1ffa0c2efcd04c569d54f7cb8b0561ff5b2362d6d27b04e,aluno,1990,17,20,0,encerrado,2026-03-18 14:17:13.895-03
+dever,212,E.M. George Pfisterer,701,2b9ce6e64bf794bb2713bcf69fa117d990918b6296ba59684abd5942aa2e3e2a,aluno,105,18,20,0,encerrado,2026-03-18 15:53:53.886-03
+dever,213,E.M. George Pfisterer,703,449a08cc9d7e6fea2aad11f7e938385357597ea16f7dc674f5b0d6823b09f5b7,aluno,92,14,20,0,encerrado,2026-03-18 17:39:23.441-03
+dever,214,E.M. George Pfisterer,701,1bd97c9cf52322cdf69ccfeb107eded89672815c9c9b0bbef744368162e29683,aluno,109,18,20,0,encerrado,2026-03-18 18:09:14.624-03
