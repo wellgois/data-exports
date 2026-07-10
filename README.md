@@ -108,6 +108,39 @@ pelo bot `jogandologica-bot`.
 > repo como `.github/workflows/export.yml.disabled` para referência
 > histórica.
 
+
+<!-- DICIONARIO_DADOS_V1 -->
+## 📋 Dicionário de Dados — `activities_YYYY-MM-DD.csv`
+
+Cada linha é uma atividade (sessão de jogo, missão, dever ou entrega de trabalho), conformada num schema único a partir de 4 fontes heterogêneas:
+
+| Coluna | Tipo | Descrição | Exemplo |
+|---|---|---|---|
+| `source` | texto | Fonte da atividade: `jogos`, `dever`, `logika`, `trabalhos` | `jogos` |
+| `ref_id` | texto | Identificador da atividade na origem (UUID ou id da tabela) | `8a9479a5-98d5-…` |
+| `escola` | texto | Escola **pseudonimizada por rótulo estável** (`Escola A`, `Escola B`). Vazio quando não vinculável (ver nota) | `Escola A` |
+| `turma` | texto | Turma do aluno/equipe, em claro (não reidentifica sem a escola real) | `702` |
+| `participante_hash` | texto (hex) | Participante (aluno ou equipe) **pseudonimizado com HMAC-SHA256** | `4b1bf77ce2d0…` |
+| `participante_tipo` | texto | `aluno` (grão individual) ou `equipe` (grão coletivo, fonte `logika`) | `aluno` |
+| `pontos` | inteiro | Pontuação obtida na atividade | `2000` |
+| `acertos` | inteiro | Número de acertos | `1` |
+| `total` | inteiro | Total de questões/itens, quando aplicável (vazio p/ jogos) | `10` |
+| `tempo_seg` | inteiro | Tempo gasto, em segundos | `107` |
+| `status` | texto | `finalizado`, `em_andamento`, `pendente` | `finalizado` |
+| `occurred_at` | timestamp | Momento do evento. **Janela em UTC** — a data do arquivo é UTC, podendo diferir do horário local (BRT = UTC−3) | `2026-07-08 22:16:51-03` |
+
+**Mapeamento fonte → tabela de origem (PostgreSQL `ap_saas`):**
+
+| `source` | Tabela de origem | Grão | Escola/turma |
+|---|---|---|---|
+| `jogos` | `jogos_educativos_sessoes` | aluno | via `JOIN alunos_senhas` |
+| `dever` | `dever_missoes` | aluno | coluna própria |
+| `logika` | `logika_missoes` | equipe | coluna própria |
+| `trabalhos` | `trabalhos_entregas` | aluno | **nulo** (ver nota) |
+
+> **Nota sobre `trabalhos`:** a coluna `aluno_id` em `trabalhos_entregas` usa um identificador (CUID) de outro espaço de identificação, que não faz `JOIN` com `alunos_senhas.id` (integer). Em vez de forçar um vínculo incorreto, `escola`/`turma` ficam **nulas** para essa fonte — decisão explícita de integridade sobre completude.
+
+
 ## 🔒 Privacidade & Governança
 
 Como os dados envolvem **menores de idade**, o pipeline operacional
@@ -118,8 +151,11 @@ aplica pseudonimização antes de qualquer dado sair do servidor:
   irreversível a partir do repositório (o pepper nunca é commitado).
 - **PII direta descartada na origem:** nomes, senhas e tokens não são
   exportados em hipótese alguma.
-- `escola` e `turma` são mantidos em claro por valor analítico; como o
-  indivíduo é hasheado, não permitem reidentificação de uma criança.
+- **`escola` pseudonimizada por rótulo estável** (`Escola A`, `Escola B`):
+  o nome real da instituição **não** é exposto no repositório público.
+  `turma` é mantida em claro — sozinha não reidentifica sem a escola real.
+  Como o indivíduo já é hasheado (HMAC), a combinação preserva valor
+  analítico (agregação por turma/escola) sem reidentificar uma criança.
 
 ## 🧱 Pipeline Analítico — Camadas
 
