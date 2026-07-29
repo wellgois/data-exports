@@ -1,0 +1,5 @@
+source,ref_id,escola,turma,participante_hash,participante_tipo,pontos,acertos,total,tempo_seg,status,occurred_at
+jogos,0383e2d1-11b1-4577-bd49-e8337b2f9d6d,Escola A,703,5eb050f8d72bd9905dee38d074ff58a3639c5f2504e704114fadb84c4de62d9d,aluno,2000,10,,0,finalizado,2026-07-28 09:26:44.660972-03
+jogos,ad2263ef-d290-47c6-b63d-a30c82beac04,Escola A,703,5eb050f8d72bd9905dee38d074ff58a3639c5f2504e704114fadb84c4de62d9d,aluno,500,10,,567,finalizado,2026-07-28 09:31:23.639876-03
+jogos,962a586d-96a8-47fa-9b10-35a37186bf11,Escola A,703,5eb050f8d72bd9905dee38d074ff58a3639c5f2504e704114fadb84c4de62d9d,aluno,500,10,,571,finalizado,2026-07-28 09:32:32.428855-03
+jogos,76038232-46dd-4667-8219-91e0fe12c0b4,Escola A,703,5eb050f8d72bd9905dee38d074ff58a3639c5f2504e704114fadb84c4de62d9d,aluno,488,10,,567,finalizado,2026-07-28 09:33:43.392538-03
