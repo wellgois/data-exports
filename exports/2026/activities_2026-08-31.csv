@@ -1,0 +1,2 @@
+source,ref_id,escola,turma,participante_hash,participante_tipo,pontos,acertos,total,tempo_seg,status,occurred_at
+jogos,2384b801-1145-44ce-9d8a-422ede5c2c6a,Escola A,701,ed8525f6fe7cc13501bfcae2e62920c6286aefdbc47102863ef1644d5f5ae0d3,aluno,15000,1,,0,finalizado,2026-08-31 18:39:03.581988-03
