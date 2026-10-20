@@ -1,12 +1,17 @@
 # 📊 JogandoLógica Data Platform
 
-> Pipeline de engenharia de dados **cloud-native** que ingere eventos de
+> Pipeline de engenharia de dados **cloud-native** que ingeriu eventos de
 > aprendizagem de uma plataforma educacional real, em arquitetura
 > **medallion (bronze → silver → gold)** sobre Azure Databricks + Delta
 > Lake, orquestrada por Azure Data Factory — acompanhado de um pipeline
 > operacional leve que exporta um feed diário **pseudonimizado** em CSV.
 
 **Stack:** Azure Data Factory · Azure Databricks · PySpark · Delta Lake · ADLS Gen2 · PostgreSQL · FastAPI · Python · Bash/cron · HMAC-SHA256 · Git
+
+> **Status (out/2026)**
+>
+> - **Pipeline analítico (Azure):** operou de **jun a jul/2026**. O ambiente Azure não está mais ativo (encerrado em jul/2026), então este repositório guarda a descrição das camadas e o [TROUBLESHOOTING.md](./TROUBLESHOOTING.md), mas não os notebooks.
+> - **Pipeline operacional (VPS):** ativo. Export diário pseudonimizado em CSV; em 19/10/2026 eram 139 arquivos e 9.767 registros desde 16/03/2026 (backfill inicial de 72 dias, 4.929 registros).
 
 ---
 
@@ -21,7 +26,7 @@ Este projeto processa esses dados por **dois pipelines independentes**,
 cada um com sua fonte e propósito:
 
 - **Pipeline analítico (Azure Databricks + ADF):** lakehouse medallion
-  que ingere da API REST pra responder perguntas como *"qual habilidade
+  que ingeriu da API REST (jun–jul/2026) pra responder perguntas como *"qual habilidade
   da BNCC a turma 701 menos domina?"* ou *"qual o pico de engajamento
   por dia da semana?"*
 - **Pipeline operacional (cron no VPS + PostgreSQL):** export diário em
@@ -34,9 +39,9 @@ cada um com sua fonte e propósito:
 > de manutenção e incidentes documentados em
 > [TROUBLESHOOTING.md](./TROUBLESHOOTING.md). O pipeline operacional
 > passou por uma migração de execução (GitHub Actions → cron no VPS,
-> ver abaixo). O pipeline analítico Azure esteve em remediação após uma
-> combinação de stockout regional de SKU + ajuste de cota de assinatura
-> — também documentada.
+> ver abaixo). O pipeline analítico Azure operou em jun–jul/2026, teve três
+> incidentes (stockout regional de SKU, bug de parâmetros no ADF e limite
+> de cota de vCPUs), todos documentados, e foi encerrado em seguida.
 
 ## 🏗️ Arquitetura
 
@@ -200,7 +205,7 @@ aluno, turma e tempo.
 
 ## ⏱️ Orquestração
 
-Execução agendada via **Azure Data Factory** com um
+Execução agendada (jun–jul/2026) via **Azure Data Factory** com um
 `TumblingWindowTrigger`, que dispara em janelas de tempo contíguas e
 permite **rerun automático** de janelas que falham — característica
 fundamental para um pipeline incremental.
@@ -221,8 +226,20 @@ Este repositório versiona o **script de export operacional**
 (`export_activities.sh`), a **documentação** e os **CSVs de saída**
 (`exports/YYYY/`). O pipeline operacional roda via **cron em VPS
 próprio** (Hostinger), após a migração do GitHub Actions descrita
-acima. Os notebooks do pipeline analítico vivem no **workspace
-Databricks**; espelhá-los neste repo é item de roadmap.
+acima. Os notebooks do pipeline analítico viviam no **workspace
+Databricks**, que foi encerrado; eles **não foram espelhados** neste repo.
+
+## 💸 Custo e lições
+
+Segundo o Azure Cost Management, o ambiente custou **R$ 301,69 no total**
+(jun–jul/2026). Cerca de 80% foi **NAT Gateway** e ~R$ 27 de rede virtual,
+ou seja, a rede gerenciada do workspace, que cobra por hora mesmo sem
+cluster ligado. O processamento foi pequeno: ~R$ 25 de Databricks e
+R$ 1,12 de Data Factory.
+
+**Lição:** em um projeto pessoal, o custo fixo da rede pesa mais que o
+processamento. Na próxima vez: alerta de orçamento desde o primeiro dia e
+encerrar o workspace quando ocioso.
 
 ## 🗺️ Roadmap
 
@@ -232,8 +249,7 @@ Databricks**; espelhá-los neste repo é item de roadmap.
 - [x] Pipeline analítico silver/gold (transformação e agregação)
 - [x] Orquestração com TumblingWindowTrigger
 - [x] Encadeamento bronze → silver → gold
-- [ ] Espelhar os notebooks Databricks neste repo
-- [ ] Aumento de cota Azure (em aprovação) → multi-node cluster
+- [ ] Recriar e publicar os notebooks do pipeline analítico (workspace original encerrado)
 - [ ] Dashboard de learning analytics sobre a camada gold
 - [ ] Enriquecimento das questões por habilidade BNCC via LLM
 - [ ] Testes de qualidade de dados (Great Expectations / dbt tests)
